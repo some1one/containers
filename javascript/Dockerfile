@@ -1,0 +1,1 @@
+FROM some1one/containers:vsc-node

@@ -1,0 +1,11 @@
+{
+    "name": "some1one/containers:vsc-base",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "args": {
+            "USERNAME": "vscode",
+            "SSH_PORT": "22"
+        }
+    },
+    "remoteUser": "vscode"
+}

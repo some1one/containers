@@ -1,0 +1,5 @@
+{
+    "name": "some1one/containers",
+    "image": "some1one/containers:vsc-docker",
+    "remoteUser": "vscode"
+}

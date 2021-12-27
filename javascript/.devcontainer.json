@@ -1,0 +1,7 @@
+{
+    "name": "some1one/containers:vsc-javascript",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    "remoteUser": "vscode"
+}
