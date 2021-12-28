@@ -1,0 +1,23 @@
+{
+  "name": "containers",
+  "version": "1.0.0",
+  "description": "Using debian as the OS since it seems the most compatible for build environments Generally using buster for backwards compatibility using the buildpack-deps images as the base since it includes the basic packages common to almost all dev containers",
+  "type": "module",
+  "main": "build.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/some1one/containers.git"
+  },
+  "author": "Justin Phillips",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/some1one/containers/issues"
+  },
+  "homepage": "https://github.com/some1one/containers#readme",
+  "devDependencies": {
+    "docker-file-parser": "^1.0.5"
+  }
+}
