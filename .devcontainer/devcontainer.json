@@ -1,5 +1,14 @@
 {
     "name": "some1one/containers",
     "image": "some1one/containers:vsc-docker",
-    "remoteUser": "vscode"
+    "remoteUser": "vscode",
+    "runArgs": ["--init", "--privileged"],
+    "overrideCommand": false,
+    "extensions": [
+		"dbaeumer.vscode-eslint",
+		"arcanis.vscode-zipfs",
+		"esbenp.prettier-vscode",
+		"rvest.vs-code-prettier-eslint",
+        "ms-azuretools.vscode-docker"
+	]
 }

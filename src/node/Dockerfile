@@ -27,7 +27,9 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 '[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" \n\
 [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"' \
     >> /etc/bash.bashrc \
-    #update npm, npx, and install global tools
+    #update npm, npx, corepack, and yarn and install global tools
     && su ${USERNAME} -c "source ${NVM_DIR}/nvm.sh && npm install -g npm" 2> /dev/null \
     && su ${USERNAME} -c "source ${NVM_DIR}/nvm.sh && npm install --force -g npx" 2> /dev/null \
+    && su ${USERNAME} -c "source ${NVM_DIR}/nvm.sh && npm install -g corepack" \
+    && su ${USERNAME} -c "source ${NVM_DIR}/nvm.sh && npm install --force -g yarn" 2> /dev/null \
     && su ${USERNAME} -c "source ${NVM_DIR}/nvm.sh && npm install -g typescript eslint prettier"

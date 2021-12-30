@@ -3,5 +3,11 @@
     "build": {
         "dockerfile": "Dockerfile"
     },
-    "remoteUser": "vscode"
+    "remoteUser": "vscode",
+    "extensions": [
+		"dbaeumer.vscode-eslint",
+		"arcanis.vscode-zipfs",
+		"esbenp.prettier-vscode",
+		"rvest.vs-code-prettier-eslint"
+	]
 }
