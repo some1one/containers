@@ -22,3 +22,5 @@ would docker-from-docker be better for building?
 cleanup scripts from orphaned images - build script errors,dockerfile error, docker compose error, devcontainer build error, vscode container launch errors
 
 remove apt install added by parent images
+
+add github extension
