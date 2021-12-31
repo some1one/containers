@@ -7,7 +7,15 @@ add vscode and extension install to docker images
 
 add vs code dockerfile layers and seperate base images without vsc- prefix
 
-build options, docker compose, scripts (download instead of copy from working dir?)
+build options
+
+build single/multiple/all containers
+
+docker compose
+
+scripts (download instead of copy from working dir?)
+
+passing docker push credentials to build container
 
 would docker-from-docker be better for building?
 
