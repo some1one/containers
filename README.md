@@ -5,7 +5,7 @@ using the buildpack-deps images as the base since it includes the basic packages
 todo: 
 add vscode and extension install to docker images
 
-add vs code dockerfile layers and seperate base images without vsc- prefix
+add vs code dockerfile layers and pre-build base images without vsc- prefix
 
 build options
 
@@ -24,3 +24,5 @@ cleanup scripts from orphaned images - build script errors,dockerfile error, doc
 remove apt install added by parent images
 
 add github extension
+
+shared volume caches
