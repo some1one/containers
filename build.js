@@ -2,6 +2,7 @@ import getContainerInfo from "./containerInfo.js";
 import { spawn } from "child_process";
 
 const insiders = false;
+const publish = false;
 const buildCommand = `devcontainer${insiders ? "-insiders" : ""}`
 
 //todo: console log levels for build scripts and for stdout for devcontainer build proccesses
@@ -21,22 +22,40 @@ async function build() {
                 resolvedInfo.find(c => 
                     c.imageName === name)));
 
-    buildOrder.forEach(async level => {
-        const buildProcesses = level.map(container => spawnProcess(container));
+    //console.log(buildOrder);
+    for (const level of buildOrder) {
+        const buildProcesses = level.map(async container => {
+            await spawnBuildProcess(container);
+            await spawnPublishProcess(container);
+        });
+
         await Promise.allSettled(buildProcesses);
-    });
+    }
 
     console.log("DONE");
 }
 
-function spawnProcess(container) {
-    new Promise((resolve, reject) => {
+function spawnBuildProcess(container) {
+    return new Promise((resolve, reject) => {
         //todo: dry run
         const buildProcess = spawn(buildCommand,[
             "build",
             "--imageName",
             container.imageName,
             container.path
+        ],
+        { stdio: "inherit" });
+        buildProcess.on("close", code => resolve(code));
+        buildProcess.on("error", error => reject(error));
+    })
+}
+
+function spawnPublishProcess(container) {
+    return new Promise((resolve, reject) => {
+        //todo: dry run
+        const buildProcess = spawn("docker",[
+            "push",
+            container.imageName
         ],
         { stdio: "inherit" });
         buildProcess.on("close", code => resolve(code));
