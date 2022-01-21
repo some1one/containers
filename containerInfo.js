@@ -134,10 +134,10 @@ export default async function getContainerInfo() {
         return {
             path: folder,
             folderName,
-            name: `vsc-${folderName}`,
+            name: `${folderName}`,
             repo: containerRepo,
-            tag: `vsc-${folderName}`,
-            imageName: `${containerRepo}:vsc-${folderName}`,
+            tag: `${folderName}`,
+            imageName: `${containerRepo}:${folderName}`,
             configPath,
             depends
         }

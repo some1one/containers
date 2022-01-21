@@ -1,6 +1,8 @@
 Using debian as the OS since it seems the most compatible for build environments
-Generally using buster for backwards compatibility
-using the buildpack-deps images as the base since it includes the basic packages common to almost all dev containers
+Generally using -buster- for backwards compatibility
+*There is a bug with openssl on arm macs (apple silicon M1 arm64 chips) with less than bullseye or ubuntu 21
+ so we will be using bullseye instead
+using the buildpack-deps images as the base since it includes many common packages to almost all dev containers
 
 todo: 
 add vscode and extension install to docker images

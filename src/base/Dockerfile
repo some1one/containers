@@ -1,37 +1,46 @@
-FROM buildpack-deps:buster
+FROM buildpack-deps:bullseye
 
 #note, we install the github cli but we DO NOT install the git credential manager as 
 #the configuration and credentials should be passed from the vs code host
 
+#setup os/apt
 RUN export DEBIAN_FRONTEND=noninteractive \
     # Remove imagemagick due to https://security-tracker.debian.org/tracker/CVE-2019-10131
     && apt-get purge -y imagemagick imagemagick-6-common \
+    #update apt repos
+    && apt-get update \
+    #install apt-utils, readline, and locals to prevent some error messages and wget
+    #disable apt-utils error message for itself until it is installed
+    #disable apt-utils warning until it is installed
+    && mv /etc/apt/apt.conf.d/70debconf . \
+    && apt-get -y install --no-install-recommends apt-utils libreadline8 locales \
+    && mv 70debconf /etc/apt/apt.conf.d \
+    # Ensure at least the en_US.UTF-8 UTF-8 locale is available.
+    && echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
+    && locale-gen \
+    #setup timezone
+    && ln -snf /usr/share/zoneinfo/$(curl https://ipapi.co/timezone) /etc/localtime \
+    && apt-get -y install --no-install-recommends tzdata \
+    && dpkg-reconfigure --frontend noninteractive tzdata \
+    #upgrade system packages
+    && apt-get -y upgrade --no-install-recommends
+
+#install software
+RUN export DEBIAN_FRONTEND=noninteractive \
     #set up github cli repo
     && curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | gpg --dearmor > /usr/share/keyrings/githubcli-archive-keyring.gpg \
     && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
-    #disable apt-utils warning until it is installed
-    && apt-get update \
-    && mv /etc/apt/apt.conf.d/70debconf . \
-    && apt-get -y install --no-install-recommends apt-utils\
-    && mv 70debconf /etc/apt/apt.conf.d \
-    #update apt repos and install required packages and common dev tools
-    && apt-get -y install --no-install-recommends \
+    #install required, security, dev etc packages and tools 
+    && apt-get update && apt-get -y install --no-install-recommends \
         openssh-server \
-        openssh-client \
         gnupg2 \
-        dirmngr \
         iproute2 \
-        procps \
         lsof \
         htop \
         net-tools \
         psmisc \
-        curl \
-        wget \
         rsync \
-        ca-certificates \
         tar \
-        unzip \
         zip \
         nano \
         vim-tiny \
@@ -48,7 +57,6 @@ RUN export DEBIAN_FRONTEND=noninteractive \
         liblttng-ust0 \
         libstdc++6 \
         zlib1g \
-        locales \
         sudo \
         ncdu \
         man-db \
@@ -57,10 +65,9 @@ RUN export DEBIAN_FRONTEND=noninteractive \
         manpages-dev \
         init-system-helpers \
         libssl1.1 \
-        git \
+        software-properties-common \
         gh \
-    #upgrade system packages and cleanup
-    && apt-get -y upgrade --no-install-recommends \
+    #cleanup
     && apt-get autoremove -y
 
 #setup user, add code/insiders shim
@@ -70,9 +77,6 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     && rm -f /etc/profile.d/00-restore-env.sh \
     && printf 'export PATH=${PATH//$(sh -lc "echo $PATH")/$PATH}' > /etc/profile.d/00-restore-env.sh \
     && chmod +x /etc/profile.d/00-restore-env.sh \
-    # Ensure at least the en_US.UTF-8 UTF-8 locale is available.
-    && echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
-    && locale-gen \
     # Create a non-root user and UID/GID.
     && groupadd $USERNAME \
     && useradd -s /bin/bash --gid $USERNAME -m $USERNAME \

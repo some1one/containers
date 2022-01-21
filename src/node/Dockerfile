@@ -1,4 +1,4 @@
-FROM some1one/containers:vsc-base
+FROM some1one/containers:base
 
 ARG USERNAME="vscode"
 ARG NODE_VERSION="lts/*"

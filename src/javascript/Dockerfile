@@ -1,1 +1,1 @@
-FROM some1one/containers:vsc-node
+FROM some1one/containers:node

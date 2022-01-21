@@ -1,6 +1,6 @@
-FROM some1one/containers:vsc-node
+FROM some1one/containers:node
 
-
+SHELL ["/bin/bash", "-c"]
 RUN  export DEBIAN_FRONTEND=noninteractive \
     # use awk and /etc/os-release to get OS info
     && export ID=$(awk -F= '$1=="ID" { print $2 }' /etc/os-release) \
@@ -18,12 +18,17 @@ RUN  export DEBIAN_FRONTEND=noninteractive \
         python3-minimal \
         python3-pip \
         libffi-dev \
+        cargo \
         python3-venv \
+        python3-dev \
     #use legacy iptables
     && update-alternatives --set iptables /usr/sbin/iptables-legacy \
     && update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy \
-    #create tmp pip env to install docker compose
-    && export PIPX_HOME=/usr/local/pipx \
+    #update pip
+    && pip3 install --no-warn-script-location --upgrade --force-reinstall --no-cache-dir --user pip
+
+#create tmp pip env to install docker compose
+RUN export PIPX_HOME=/usr/local/pipx \
     && mkdir -p ${PIPX_HOME} \
     && export PIPX_BIN_DIR=/usr/local/bin \
     && export PYTHONUSERBASE=/tmp/pip-tmp \

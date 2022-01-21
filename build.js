@@ -1,9 +1,11 @@
 import getContainerInfo from "./containerInfo.js";
-import { spawn } from "child_process";
+import { spawn, exec } from "child_process";
 
 const insiders = false;
-const publish = false;
+const publish = true;
 const buildCommand = `devcontainer${insiders ? "-insiders" : ""}`
+//node doesnt support 32bit intel (linux/386)
+const platforms = ["linux/amd64","linux/arm64","linux/arm"]
 
 //todo: console log levels for build scripts and for stdout for devcontainer build proccesses
 //todo: publish flag
@@ -21,33 +23,79 @@ async function build() {
             level.map(name => 
                 resolvedInfo.find(c => 
                     c.imageName === name)));
-
-    //console.log(buildOrder);
+    
+    await spawnCreateBuildContainer();
     for (const level of buildOrder) {
         const buildProcesses = level.map(async container => {
+            
             await spawnBuildProcess(container);
-            await spawnPublishProcess(container);
+            //await spawnPublishProcess(container);
+            //node wont exit until removal processes are done
+            
         });
 
         await Promise.allSettled(buildProcesses);
     }
+    spawnRemoveBuildContainer();
 
-    console.log("DONE");
+    console.log("Cleaning up");
 }
 
 function spawnBuildProcess(container) {
     return new Promise((resolve, reject) => {
         //todo: dry run
-        const buildProcess = spawn(buildCommand,[
+        // const buildProcess = spawn(buildCommand,[
+        //     "build",
+        //     "--imageName",
+        //     container.imageName,
+        //     container.path
+        // ],
+        //{ stdio: "inherit" });
+        const buildProcess = spawn("docker",[
+            "buildx",
             "build",
-            "--imageName",
+            "--builder",
+            "build",
+            "--platform",
+            platforms.join(','),
+            "--tag",
             container.imageName,
+            "--output",
+            `type=image,push=${publish ? "true" : "false"},name=${container.imageName}`,
+            (publish ? "--push" : ""),
             container.path
         ],
         { stdio: "inherit" });
         buildProcess.on("close", code => resolve(code));
         buildProcess.on("error", error => reject(error));
     })
+}
+
+function spawnCreateBuildContainer() {
+    return new Promise((resolve, reject) => {
+        const create = spawn("docker", [
+            "buildx",
+            "create",
+            "--name",
+            "build"
+        ],
+        { stdio: "inherit" });
+        create.on("close", code => resolve(code));
+        create.on("error", error => reject(error));
+    });
+}
+
+function spawnRemoveBuildContainer() {
+    return new Promise((resolve, reject) => {
+        const rm = spawn("docker", [
+            "buildx",
+            "rm",
+            "build"
+        ],
+        { stdio: "inherit" });
+        rm.on("close", code => resolve(code));
+        rm.on("error", error => reject(error));
+    });
 }
 
 function spawnPublishProcess(container) {
