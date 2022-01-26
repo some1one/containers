@@ -35,13 +35,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         [null, {
           "packageLocation": "./",
           "packageDependencies": [
+            ["@types/yargs", "npm:17.0.8"],
             ["@typescript-eslint/parser", "virtual:43a4a42d4681e5a38f4b9d23dc4aed382b08512d6061fd2b6339df44299899d6b4d3834f3c26f2ff35223a50aa7e79fb5414f859f54daa93e77a21948a442951#npm:5.8.1"],
             ["@yarnpkg/sdks", "npm:2.5.1-rc.6"],
             ["docker-file-parser", "npm:1.0.5"],
             ["eslint", "npm:8.5.0"],
             ["prettier", "npm:2.5.1"],
             ["prettier-eslint", "npm:13.0.0"],
-            ["typescript", "patch:typescript@npm%3A4.5.4#~builtin<compat/typescript>::version=4.5.4&hash=493e53"]
+            ["typescript", "patch:typescript@npm%3A4.5.4#~builtin<compat/typescript>::version=4.5.4&hash=493e53"],
+            ["yargs", "npm:17.3.1"]
           ],
           "linkType": "SOFT",
         }]
@@ -319,6 +321,25 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "../../.yarn/berry/cache/@types-treeify-npm-1.0.0-b5e04e9cd3-8.zip/node_modules/@types/treeify/",
           "packageDependencies": [
             ["@types/treeify", "npm:1.0.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@types/yargs", [
+        ["npm:17.0.8", {
+          "packageLocation": "../../.yarn/berry/cache/@types-yargs-npm-17.0.8-e5cb83d738-8.zip/node_modules/@types/yargs/",
+          "packageDependencies": [
+            ["@types/yargs", "npm:17.0.8"],
+            ["@types/yargs-parser", "npm:20.2.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@types/yargs-parser", [
+        ["npm:20.2.1", {
+          "packageLocation": "../../.yarn/berry/cache/@types-yargs-parser-npm-20.2.1-2eed5b5c1c-8.zip/node_modules/@types/yargs-parser/",
+          "packageDependencies": [
+            ["@types/yargs-parser", "npm:20.2.1"]
           ],
           "linkType": "HARD",
         }]
@@ -1047,6 +1068,18 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["cliui", [
+        ["npm:7.0.4", {
+          "packageLocation": "../../.yarn/berry/cache/cliui-npm-7.0.4-d6b8a9edb6-8.zip/node_modules/cliui/",
+          "packageDependencies": [
+            ["cliui", "npm:7.0.4"],
+            ["string-width", "npm:4.2.3"],
+            ["strip-ansi", "npm:6.0.1"],
+            ["wrap-ansi", "npm:7.0.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["clone-response", [
         ["npm:1.0.2", {
           "packageLocation": "../../.yarn/berry/cache/clone-response-npm-1.0.2-135ae8239d-8.zip/node_modules/clone-response/",
@@ -1127,13 +1160,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./",
           "packageDependencies": [
             ["containers", "workspace:."],
+            ["@types/yargs", "npm:17.0.8"],
             ["@typescript-eslint/parser", "virtual:43a4a42d4681e5a38f4b9d23dc4aed382b08512d6061fd2b6339df44299899d6b4d3834f3c26f2ff35223a50aa7e79fb5414f859f54daa93e77a21948a442951#npm:5.8.1"],
             ["@yarnpkg/sdks", "npm:2.5.1-rc.6"],
             ["docker-file-parser", "npm:1.0.5"],
             ["eslint", "npm:8.5.0"],
             ["prettier", "npm:2.5.1"],
             ["prettier-eslint", "npm:13.0.0"],
-            ["typescript", "patch:typescript@npm%3A4.5.4#~builtin<compat/typescript>::version=4.5.4&hash=493e53"]
+            ["typescript", "patch:typescript@npm%3A4.5.4#~builtin<compat/typescript>::version=4.5.4&hash=493e53"],
+            ["yargs", "npm:17.3.1"]
           ],
           "linkType": "SOFT",
         }]
@@ -1300,6 +1335,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["enquirer", "npm:2.3.6"],
             ["ansi-colors", "npm:4.1.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["escalade", [
+        ["npm:3.1.1", {
+          "packageLocation": "../../.yarn/berry/cache/escalade-npm-3.1.1-e02da076aa-8.zip/node_modules/escalade/",
+          "packageDependencies": [
+            ["escalade", "npm:3.1.1"]
           ],
           "linkType": "HARD",
         }]
@@ -1707,6 +1751,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "../../.yarn/berry/cache/functional-red-black-tree-npm-1.0.1-ccfe924dcd-8.zip/node_modules/functional-red-black-tree/",
           "packageDependencies": [
             ["functional-red-black-tree", "npm:1.0.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["get-caller-file", [
+        ["npm:2.0.5", {
+          "packageLocation": "../../.yarn/berry/cache/get-caller-file-npm-2.0.5-80e8a86305-8.zip/node_modules/get-caller-file/",
+          "packageDependencies": [
+            ["get-caller-file", "npm:2.0.5"]
           ],
           "linkType": "HARD",
         }]
@@ -2649,6 +2702,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["require-directory", [
+        ["npm:2.1.1", {
+          "packageLocation": "../../.yarn/berry/cache/require-directory-npm-2.1.1-8608aee50b-8.zip/node_modules/require-directory/",
+          "packageDependencies": [
+            ["require-directory", "npm:2.1.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["require-from-string", [
         ["npm:2.0.2", {
           "packageLocation": "../../.yarn/berry/cache/require-from-string-npm-2.0.2-8557e0db12-8.zip/node_modules/require-from-string/",
@@ -3142,6 +3204,18 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["wrap-ansi", [
+        ["npm:7.0.0", {
+          "packageLocation": "../../.yarn/berry/cache/wrap-ansi-npm-7.0.0-ad6e1a0554-8.zip/node_modules/wrap-ansi/",
+          "packageDependencies": [
+            ["wrap-ansi", "npm:7.0.0"],
+            ["ansi-styles", "npm:4.3.0"],
+            ["string-width", "npm:4.2.3"],
+            ["strip-ansi", "npm:6.0.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["wrappy", [
         ["npm:1.0.2", {
           "packageLocation": "../../.yarn/berry/cache/wrappy-npm-1.0.2-916de4d4b3-8.zip/node_modules/wrappy/",
@@ -3151,11 +3225,45 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["y18n", [
+        ["npm:5.0.8", {
+          "packageLocation": "../../.yarn/berry/cache/y18n-npm-5.0.8-5f3a0a7e62-8.zip/node_modules/y18n/",
+          "packageDependencies": [
+            ["y18n", "npm:5.0.8"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["yallist", [
         ["npm:4.0.0", {
           "packageLocation": "../../.yarn/berry/cache/yallist-npm-4.0.0-b493d9e907-8.zip/node_modules/yallist/",
           "packageDependencies": [
             ["yallist", "npm:4.0.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["yargs", [
+        ["npm:17.3.1", {
+          "packageLocation": "../../.yarn/berry/cache/yargs-npm-17.3.1-26b02c35fd-8.zip/node_modules/yargs/",
+          "packageDependencies": [
+            ["yargs", "npm:17.3.1"],
+            ["cliui", "npm:7.0.4"],
+            ["escalade", "npm:3.1.1"],
+            ["get-caller-file", "npm:2.0.5"],
+            ["require-directory", "npm:2.1.1"],
+            ["string-width", "npm:4.2.3"],
+            ["y18n", "npm:5.0.8"],
+            ["yargs-parser", "npm:21.0.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["yargs-parser", [
+        ["npm:21.0.0", {
+          "packageLocation": "../../.yarn/berry/cache/yargs-parser-npm-21.0.0-d564c0a5d4-8.zip/node_modules/yargs-parser/",
+          "packageDependencies": [
+            ["yargs-parser", "npm:21.0.0"]
           ],
           "linkType": "HARD",
         }]

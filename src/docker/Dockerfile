@@ -1,6 +1,5 @@
-FROM some1one/containers:node
+FROM some1one/containers:python-node
 
-SHELL ["/bin/bash", "-c"]
 RUN  export DEBIAN_FRONTEND=noninteractive \
     # use awk and /etc/os-release to get OS info
     && export ID=$(awk -F= '$1=="ID" { print $2 }' /etc/os-release) \
@@ -15,32 +14,35 @@ RUN  export DEBIAN_FRONTEND=noninteractive \
         iptables \
         docker-ce \
         docker-ce-cli \
-        python3-minimal \
-        python3-pip \
-        libffi-dev \
+        #we only need cargo/rust to build PyYaml during the docker-compose install on arm platforms (works fine on arm64)
         cargo \
-        python3-venv \
-        python3-dev \
-    #use legacy iptables
+        rustc \
+    #use legacy iptables for docker-in-docker
     && update-alternatives --set iptables /usr/sbin/iptables-legacy \
     && update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy \
-    #update pip
-    && pip3 install --no-warn-script-location --upgrade --force-reinstall --no-cache-dir --user pip
+    && apt-get autoremove -y
 
-#create tmp pip env to install docker compose
-RUN export PIPX_HOME=/usr/local/pipx \
-    && mkdir -p ${PIPX_HOME} \
-    && export PIPX_BIN_DIR=/usr/local/bin \
+#create virtual env to install docker-compose
+SHELL ["/bin/bash", "-c"]
+RUN source /etc/profile.d/pyenv.sh \
+    && pyenv virtualenv 3.9.10 docker-compose \
+    && pyenv activate docker-compose \
     && export PYTHONUSERBASE=/tmp/pip-tmp \
     && export PIP_CACHE_DIR=/tmp/pip-tmp/cache \
-    && pip3 install --no-warn-script-location --disable-pip-version-check --no-cache-dir --user pipx \
+    #prepare and install pipx
+    && export PIPX_HOME="$PYENV_VIRTUAL_ENV" \
+    && export PIPX_BIN_DIR="$PIPX_HOME/bin" \
+    && export PIPX_DEFAULT_PYTHON="$PIPX_BIN_DIR/python" \
+    && pip install --no-warn-script-location --disable-pip-version-check --no-cache-dir pipx \
     #install docker-compose
-    && /tmp/pip-tmp/bin/pipx install --pip-args '--no-cache-dir --force-reinstall' docker-compose \
+    && pipx install --pip-args '--no-cache-dir --force-reinstall' docker-compose \
     #cleanup
-    && rm -rf /tmp/pip-tmp
+    && rm -rf /tmp/pip-tmp \
+    && pyenv deactivate docker-compose
 
 #setup docker user and init script
 ARG USERNAME="vscode"
+ARG NODE_VERSION="lts/*"
 RUN usermod -aG docker ${USERNAME} \
     && echo '#!/bin/sh\nset -e\ndockerd_start="' >> /usr/local/share/docker-init.sh \
     && echo "\$(cat << 'END'" >> /usr/local/share/docker-init.sh \
@@ -58,7 +60,7 @@ RUN usermod -aG docker ${USERNAME} \
     >> /usr/local/share/docker-init.sh \
     && echo "        sed -e 's/ / +/g' -e 's/^/+/' < /sys/fs/cgroup/cgroup.controllers \\" \
     >> /usr/local/share/docker-init.sh \
-    && echo '            > /sys/fs/cgroup/cgroup.subtree_control\n\
+    && printf '            > /sys/fs/cgroup/cgroup.subtree_control\n\
     fi\n\
     set -e\n\
     ( dockerd > /tmp/dockerd.log 2>&1 ) &\n\

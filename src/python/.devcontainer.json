@@ -1,10 +1,7 @@
 {
     "name": "some1one/containers:vsc-python",
     "build": {
-        "dockerfile": "Dockerfile",
-        "args": {
-            "USERNAME": "vscode",
-        }
+        "dockerfile": "Dockerfile"
     },
     "remoteUser": "vscode"
 }

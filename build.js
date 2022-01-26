@@ -1,9 +1,24 @@
 import getContainerInfo from "./containerInfo.js";
 import { spawn, exec } from "child_process";
+import { default as yargs } from "yargs/yargs";
+import { hideBin } from 'yargs/helpers';
 
-const insiders = false;
-const publish = true;
-const buildCommand = `devcontainer${insiders ? "-insiders" : ""}`
+const args = yargs(hideBin(process.argv))
+    .option('insiders', { alias: 'i', type: 'boolean', default: false })
+    .option('dry-run', { alias: 'd', type: 'boolean', default: false })
+    .option('stdout', { alias: 'O', ttype: 'boolean', default: false })
+    .option('verbose', { alias: 'v', type: 'boolean', default: false }) //implies 'stdout'
+    .option('log', { alias: 'l', type: 'boolean', default: false })
+    .option('publish', { alias: 'p', type: 'boolean', default: false })
+    .option('clean', { alias: 'c', type: 'boolean', default: false})
+    .help().alias('help', 'h')
+    .argv;
+
+//prevent bug with process termination
+if(!args.help) {
+
+const publish = args.publish;
+const buildCommand = `devcontainer${args.insiders ? "-insiders" : ""}`
 //node doesnt support 32bit intel (linux/386)
 const platforms = ["linux/amd64","linux/arm64","linux/arm"]
 
@@ -12,9 +27,10 @@ const platforms = ["linux/amd64","linux/arm64","linux/arm"]
 
 async function build() {
     const containerInfo = await getContainerInfo();
+
     //log errored container info
     containerInfo.filter(i => i.status === "rejected")
-        .forEach(e => console.log(`Failed to get container info. REASON: ${e.reason}`));
+        .forEach(e => console.error(`Failed to get container info. REASON: ${e.reason}`));
 
     const resolvedInfo = containerInfo.filter(i => i.status === "fulfilled").map(i => i.value);
 
@@ -25,6 +41,7 @@ async function build() {
                     c.imageName === name)));
     
     await spawnCreateBuildContainer();
+
     for (const level of buildOrder) {
         const buildProcesses = level.map(async container => {
             
@@ -36,9 +53,14 @@ async function build() {
 
         await Promise.allSettled(buildProcesses);
     }
-    spawnRemoveBuildContainer();
 
-    console.log("Cleaning up");
+    if(args.clean) {
+        spawnRemoveBuildContainer();
+        console.info("Cleaning up");
+    }
+
+
+    console.info("Done!");
 }
 
 function spawnBuildProcess(container) {
@@ -62,7 +84,6 @@ function spawnBuildProcess(container) {
             container.imageName,
             "--output",
             `type=image,push=${publish ? "true" : "false"},name=${container.imageName}`,
-            (publish ? "--push" : ""),
             container.path
         ],
         { stdio: "inherit" });
@@ -173,3 +194,5 @@ function sortContainers(containers) {
 }
 
 await build();
+
+}

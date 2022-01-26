@@ -1,0 +1,16 @@
+{
+    "name": "some1one/containers:vsc-python-node",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "args": {
+            "USERNAME":"vscode"
+        }
+    },
+    "remoteUser": "vscode",
+    "extensions": [
+		"dbaeumer.vscode-eslint",
+		"arcanis.vscode-zipfs",
+		"esbenp.prettier-vscode",
+		"rvest.vs-code-prettier-eslint"
+	]
+}
